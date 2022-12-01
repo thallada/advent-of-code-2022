@@ -8,8 +8,8 @@ pub fn main() !void {
     const stdout = bw.writer();
 
     try stdout.print("Day 1\nPart 1: {}\nPart 2: {}\n\n", .{
-        try day01.solve_part1("input/day01.txt"),
-        try day01.solve_part2("input/day01.txt"),
+        try day01.solve_part1(day01.input),
+        try day01.solve_part2(day01.input),
     });
 
     try bw.flush();

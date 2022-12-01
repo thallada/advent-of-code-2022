@@ -1,18 +1,13 @@
 const std = @import("std");
 
-const MAX_BYTES = 2048 * 2048;
+pub const input = @embedFile("input/day01.txt");
+const test_input = @embedFile("input/day01_test1.txt");
 
 var gpa = std.heap.GeneralPurposeAllocator(.{ .safety = true }){};
 const allocator = gpa.allocator();
 
-pub fn solve_part1(filename: []const u8) !usize {
-    const input_file = try std.fs.cwd().openFile(filename, .{ .mode = std.fs.File.OpenMode.read_only });
-    defer input_file.close();
-
-    const input = try input_file.readToEndAlloc(allocator, MAX_BYTES);
-    defer allocator.free(input);
-
-    var lines = std.mem.split(u8, input, "\n");
+pub fn solve_part1(data: []const u8) !usize {
+    var lines = std.mem.split(u8, data, "\n");
     var largest_calories: usize = 0;
     var calories: usize = 0;
     while (lines.next()) |line| {
@@ -29,14 +24,8 @@ pub fn solve_part1(filename: []const u8) !usize {
     return largest_calories;
 }
 
-pub fn solve_part2(filename: []const u8) !usize {
-    const input_file = try std.fs.cwd().openFile(filename, .{ .mode = std.fs.File.OpenMode.read_only });
-    defer input_file.close();
-
-    const input = try input_file.readToEndAlloc(allocator, MAX_BYTES);
-    defer allocator.free(input);
-
-    var lines = std.mem.split(u8, input, "\n");
+pub fn solve_part2(data: []const u8) !usize {
+    var lines = std.mem.split(u8, data, "\n");
     var elves = std.ArrayList(usize).init(allocator);
     defer elves.deinit();
     var calories: usize = 0;
@@ -56,9 +45,9 @@ pub fn solve_part2(filename: []const u8) !usize {
 }
 
 test "solves part1" {
-    try std.testing.expectEqual(solve_part1("input/day01_test1.txt"), 24000);
+    try std.testing.expectEqual(solve_part1(test_input), 24000);
 }
 
 test "solves part2" {
-    try std.testing.expectEqual(solve_part2("input/day01_test1.txt"), 45000);
+    try std.testing.expectEqual(solve_part2(test_input), 45000);
 }
