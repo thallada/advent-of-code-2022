@@ -7,7 +7,10 @@ pub fn main() !void {
     var bw = std.io.bufferedWriter(stdout_file);
     const stdout = bw.writer();
 
-    try stdout.print("Day 1\nPart 1: {}\nPart 2: {}\n\n", .{ try day01.solve_part1(), try day01.solve_part2() });
+    try stdout.print("Day 1\nPart 1: {}\nPart 2: {}\n\n", .{
+        try day01.solve_part1("input/day01.txt"),
+        try day01.solve_part2("input/day01.txt"),
+    });
 
     try bw.flush();
 }
