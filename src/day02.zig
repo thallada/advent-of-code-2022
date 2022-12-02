@@ -3,35 +3,32 @@ const std = @import("std");
 pub const input = @embedFile("input/day02.txt");
 const test_input = @embedFile("input/day02_test1.txt");
 
-var gpa = std.heap.GeneralPurposeAllocator(.{ .safety = true }){};
-const allocator = gpa.allocator();
-
 const Choice = enum(usize) {
     Rock = 1,
     Paper = 2,
     Scissors = 3,
-    fn from_opponent_char(char: u8) Choice {
+    fn from_opponent_char(char: u8) error{InvalidChar}!Choice {
         return switch (char) {
             'A' => Choice.Rock,
             'B' => Choice.Paper,
             'C' => Choice.Scissors,
-            else => @panic("invalid opponent char!"),
+            else => error.InvalidChar,
         };
     }
-    fn from_me_char(char: u8) Choice {
+    fn from_me_char(char: u8) error{InvalidChar}!Choice {
         return switch (char) {
             'X' => Choice.Rock,
             'Y' => Choice.Paper,
             'Z' => Choice.Scissors,
-            else => @panic("invalid me char!"),
+            else => error.InvalidChar,
         };
     }
-    fn from_outcome(self: Choice, outcome_char: u8) Choice {
+    fn from_outcome_char(self: Choice, outcome_char: u8) error{InvalidChar}!Choice {
         return switch (outcome_char) {
             'X' => self.lose_choice(),
             'Y' => self,
             'Z' => self.win_choice(),
-            else => @panic("invalid outcome char!"),
+            else => error.InvalidChar,
         };
     }
     fn lose_choice(self: Choice) Choice {
@@ -56,14 +53,14 @@ const Choice = enum(usize) {
     }
 };
 
-pub fn solve_part1(data: []const u8) usize {
+pub fn solve_part1(data: []const u8) !usize {
     var lines = std.mem.split(u8, data, "\n");
     var score: usize = 0;
     while (lines.next()) |line| {
         if (std.mem.eql(u8, line, "")) break;
         var player_choices = std.mem.split(u8, line, " ");
-        var opponent = Choice.from_opponent_char(player_choices.next().?[0]);
-        var me = Choice.from_me_char(player_choices.next().?[0]);
+        var opponent = try Choice.from_opponent_char(player_choices.next().?[0]);
+        var me = try Choice.from_me_char(player_choices.next().?[0]);
         score += @enumToInt(me);
         if (me.beats(opponent)) {
             score += 6;
@@ -74,14 +71,14 @@ pub fn solve_part1(data: []const u8) usize {
     return score;
 }
 
-pub fn solve_part2(data: []const u8) usize {
+pub fn solve_part2(data: []const u8) !usize {
     var lines = std.mem.split(u8, data, "\n");
     var score: usize = 0;
     while (lines.next()) |line| {
         if (std.mem.eql(u8, line, "")) break;
         var player_choices = std.mem.split(u8, line, " ");
-        var opponent = Choice.from_opponent_char(player_choices.next().?[0]);
-        var me = opponent.from_outcome(player_choices.next().?[0]);
+        var opponent = try Choice.from_opponent_char(player_choices.next().?[0]);
+        var me = try opponent.from_outcome_char(player_choices.next().?[0]);
         score += @enumToInt(me);
         if (me.beats(opponent)) {
             score += 6;
