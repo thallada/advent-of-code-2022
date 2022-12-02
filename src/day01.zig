@@ -38,7 +38,7 @@ pub fn solve_part2(data: []const u8) !usize {
         }
     }
 
-    var elves_slice = elves.toOwnedSlice();
+    var elves_slice = try elves.toOwnedSlice();
     defer allocator.free(elves_slice);
     std.sort.sort(usize, elves_slice, {}, comptime std.sort.desc(usize));
     return elves_slice[0] + elves_slice[1] + elves_slice[2];
