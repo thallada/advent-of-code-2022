@@ -46,7 +46,7 @@ const Choice = enum(usize) {
         };
     }
     fn beats(self: Choice, other: Choice) bool {
-        return if (other.win_choice() == self) true else false;
+        return other.win_choice() == self;
     }
     fn ties(self: Choice, other: Choice) bool {
         return self == other;
