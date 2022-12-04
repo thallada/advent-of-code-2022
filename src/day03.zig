@@ -3,23 +3,21 @@ const std = @import("std");
 pub const input = @embedFile("input/day03.txt");
 const test_input = @embedFile("input/day03_test1.txt");
 
+const PrioritySet = std.StaticBitSet(26 * 2 + 1);
+const EmptyGroup = [3]PrioritySet{ PrioritySet.initEmpty(), PrioritySet.initEmpty(), PrioritySet.initEmpty() };
+
 fn ascii_to_priority(char: u8) error{InvalidChar}!u8 {
-    if (char >= 97 and char <= 122) {
-        return char - 96;
-    } else if (char >= 65 and char <= 90) {
-        return char - 64 + 26;
-    } else {
-        return error.InvalidChar;
-    }
+    return switch (char) {
+        'a'...'z' => char - 'a' + 1,
+        'A'...'Z' => char - 'A' + 27,
+        else => error.InvalidChar,
+    };
 }
 
-const PrioritySet = std.StaticBitSet(26 * 2 + 1);
-
 pub fn solve_part1(data: []const u8) !usize {
-    var lines = std.mem.split(u8, data, "\n");
+    var lines = std.mem.tokenize(u8, data, "\n");
     var sum: usize = 0;
     while (lines.next()) |line| {
-        if (std.mem.eql(u8, line, "")) break;
         var compartment1 = PrioritySet.initEmpty();
         var compartment2 = PrioritySet.initEmpty();
         var i: usize = 0;
@@ -38,18 +36,14 @@ pub fn solve_part1(data: []const u8) !usize {
 }
 
 pub fn solve_part2(data: []const u8) !usize {
-    var lines = std.mem.split(u8, data, "\n");
+    var lines = std.mem.tokenize(u8, data, "\n");
     var sum: usize = 0;
     var i: usize = 0;
-    var group = [3]PrioritySet{ PrioritySet.initEmpty(), PrioritySet.initEmpty(), PrioritySet.initEmpty() };
-    while (i < 3) {
-        const line = lines.next().?;
-        if (std.mem.eql(u8, line, "")) break;
+    var group = EmptyGroup;
+    while (i < 3) : (i = (i + 1) % 3) {
+        const line = lines.next() orelse break;
 
-        var j: usize = 0;
-        while (j < line.len) : (j += 1) {
-            group[i].set(try ascii_to_priority(line[j]));
-        }
+        for (line) |item| group[i].set(try ascii_to_priority(item));
 
         if (i == 2) {
             group[0].setIntersection(group[1]);
@@ -57,14 +51,17 @@ pub fn solve_part2(data: []const u8) !usize {
             const priority = group[0].findFirstSet().?;
             sum += priority;
 
-            i = 0;
-            group = [3]PrioritySet{ PrioritySet.initEmpty(), PrioritySet.initEmpty(), PrioritySet.initEmpty() };
-            continue;
+            group = EmptyGroup;
         }
-
-        i += 1;
     }
     return sum;
+}
+
+test "ascii_to_priority" {
+    try std.testing.expectEqual(ascii_to_priority('a'), 1);
+    try std.testing.expectEqual(ascii_to_priority('z'), 26);
+    try std.testing.expectEqual(ascii_to_priority('A'), 27);
+    try std.testing.expectEqual(ascii_to_priority('Z'), 52);
 }
 
 test "solves part1" {

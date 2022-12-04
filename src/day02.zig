@@ -54,11 +54,10 @@ const Choice = enum(usize) {
 };
 
 pub fn solve_part1(data: []const u8) !usize {
-    var lines = std.mem.split(u8, data, "\n");
+    var lines = std.mem.tokenize(u8, data, "\n");
     var score: usize = 0;
     while (lines.next()) |line| {
-        if (std.mem.eql(u8, line, "")) break;
-        var player_choices = std.mem.split(u8, line, " ");
+        var player_choices = std.mem.tokenize(u8, line, " ");
         var opponent = try Choice.from_opponent_char(player_choices.next().?[0]);
         var me = try Choice.from_me_char(player_choices.next().?[0]);
         score += @enumToInt(me);
@@ -72,11 +71,10 @@ pub fn solve_part1(data: []const u8) !usize {
 }
 
 pub fn solve_part2(data: []const u8) !usize {
-    var lines = std.mem.split(u8, data, "\n");
+    var lines = std.mem.tokenize(u8, data, "\n");
     var score: usize = 0;
     while (lines.next()) |line| {
-        if (std.mem.eql(u8, line, "")) break;
-        var player_choices = std.mem.split(u8, line, " ");
+        var player_choices = std.mem.tokenize(u8, line, " ");
         var opponent = try Choice.from_opponent_char(player_choices.next().?[0]);
         var me = try opponent.from_outcome_char(player_choices.next().?[0]);
         score += @enumToInt(me);
