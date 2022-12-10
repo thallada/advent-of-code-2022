@@ -9,6 +9,7 @@ const day06 = @import("day06.zig");
 const day07 = @import("day07.zig");
 const day08 = @import("day08.zig");
 const day09 = @import("day09.zig");
+const day10 = @import("day10.zig");
 const utils = @import("utils.zig");
 
 fn solve_day(comptime day_num: u8, day: anytype, stdout: anytype, timer: *std.time.Timer) !void {
@@ -18,20 +19,20 @@ fn solve_day(comptime day_num: u8, day: anytype, stdout: anytype, timer: *std.ti
     var part1 = try day.solve_part1(day.input);
     const part1_end = timer.read();
     const part1_time = utils.HumanTime.new(part1_end - part1_start);
-    if (@TypeOf(part1) == []const u8) {
-        try stdout.print("Part 1: {s} ({d:.2} {s})\n", .{ part1, part1_time.value, part1_time.unit.abbr() });
-    } else {
+    if (@TypeOf(part1) == usize or @TypeOf(part1) == isize) {
         try stdout.print("Part 1: {} ({d:.2} {s})\n", .{ part1, part1_time.value, part1_time.unit.abbr() });
+    } else {
+        try stdout.print("Part 1: \n{s} ({d:.2} {s})\n", .{ part1, part1_time.value, part1_time.unit.abbr() });
     }
 
     const part2_start = timer.read();
     var part2 = try day.solve_part2(day.input);
     const part2_end = timer.read();
     const part2_time = utils.HumanTime.new(part2_end - part2_start);
-    if (@TypeOf(part2) == []const u8) {
-        try stdout.print("Part 2: {s} ({d:.2} {s})\n", .{ part2, part2_time.value, part2_time.unit.abbr() });
-    } else {
+    if (@TypeOf(part2) == usize or @TypeOf(part2) == isize) {
         try stdout.print("Part 2: {} ({d:.2} {s})\n", .{ part2, part2_time.value, part2_time.unit.abbr() });
+    } else {
+        try stdout.print("Part 2: \n{s} ({d:.2} {s})\n", .{ part2, part2_time.value, part2_time.unit.abbr() });
     }
 }
 
@@ -50,6 +51,7 @@ pub fn main() !void {
     try solve_day(7, day07, &stdout, &timer);
     try solve_day(8, day08, &stdout, &timer);
     try solve_day(9, day09, &stdout, &timer);
+    try solve_day(10, day10, &stdout, &timer);
 
     try bw.flush();
 }
@@ -66,5 +68,6 @@ test {
     _ = day07;
     _ = day08;
     _ = day09;
+    _ = day10;
     _ = utils;
 }
