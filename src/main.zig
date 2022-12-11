@@ -20,7 +20,7 @@ fn solve_day(comptime day_num: u8, day: anytype, stdout: anytype, timer: *std.ti
     var part1 = try day.solve_part1(day.input);
     const part1_end = timer.read();
     const part1_time = utils.HumanTime.new(part1_end - part1_start);
-    if (@TypeOf(part1) == usize or @TypeOf(part1) == isize) {
+    if (@TypeOf(part1) == usize or @TypeOf(part1) == isize or @TypeOf(part1) == u64 or @TypeOf(part1) == u128) {
         try stdout.print("Part 1: {} ({d:.2} {s})\n", .{ part1, part1_time.value, part1_time.unit.abbr() });
     } else {
         try stdout.print("Part 1: \n{s} ({d:.2} {s})\n", .{ part1, part1_time.value, part1_time.unit.abbr() });
@@ -30,7 +30,7 @@ fn solve_day(comptime day_num: u8, day: anytype, stdout: anytype, timer: *std.ti
     var part2 = try day.solve_part2(day.input);
     const part2_end = timer.read();
     const part2_time = utils.HumanTime.new(part2_end - part2_start);
-    if (@TypeOf(part2) == usize or @TypeOf(part2) == isize) {
+    if (@TypeOf(part2) == usize or @TypeOf(part2) == isize or @TypeOf(part2) == u64 or @TypeOf(part2) == u128) {
         try stdout.print("Part 2: {} ({d:.2} {s})\n", .{ part2, part2_time.value, part2_time.unit.abbr() });
     } else {
         try stdout.print("Part 2: \n{s} ({d:.2} {s})\n", .{ part2, part2_time.value, part2_time.unit.abbr() });
@@ -53,7 +53,7 @@ pub fn main() !void {
     try solve_day(8, day08, &stdout, &timer);
     try solve_day(9, day09, &stdout, &timer);
     try solve_day(10, day10, &stdout, &timer);
-    try solve_day(11, day10, &stdout, &timer);
+    try solve_day(11, day11, &stdout, &timer);
 
     try bw.flush();
 }
