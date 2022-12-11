@@ -4,9 +4,6 @@ pub const input = @embedFile("input/day10.txt");
 const test_input1 = @embedFile("input/day10_test1.txt");
 const test_input2 = @embedFile("input/day10_test2.txt");
 
-var gpa = std.heap.GeneralPurposeAllocator(.{ .safety = true }){};
-const allocator = gpa.allocator();
-
 fn signal_strength(cycle: usize, x: isize) isize {
     if (cycle == 20 or cycle == 60 or cycle == 100 or cycle == 140 or cycle == 180 or cycle == 220) {
         return @intCast(isize, cycle) * x;

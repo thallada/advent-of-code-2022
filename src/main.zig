@@ -10,6 +10,7 @@ const day07 = @import("day07.zig");
 const day08 = @import("day08.zig");
 const day09 = @import("day09.zig");
 const day10 = @import("day10.zig");
+const day11 = @import("day11.zig");
 const utils = @import("utils.zig");
 
 fn solve_day(comptime day_num: u8, day: anytype, stdout: anytype, timer: *std.time.Timer) !void {
@@ -52,6 +53,7 @@ pub fn main() !void {
     try solve_day(8, day08, &stdout, &timer);
     try solve_day(9, day09, &stdout, &timer);
     try solve_day(10, day10, &stdout, &timer);
+    try solve_day(11, day10, &stdout, &timer);
 
     try bw.flush();
 }
@@ -69,5 +71,6 @@ test {
     _ = day08;
     _ = day09;
     _ = day10;
+    _ = day11;
     _ = utils;
 }
